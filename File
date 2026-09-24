@@ -1,0 +1,68 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class ExpenseSplitter {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Expense Splitter");
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+
+        panel.setLayout(new GridLayout(5, 2, 10, 10));
+
+        JLabel totalLabel = new JLabel("Total Expense:");
+        JTextField totalField = new JTextField();
+        JLabel peopleLabel = new JLabel("Number of People:");
+        JTextField peopleField = new JTextField();
+        JButton calcButton = new JButton("CALCULATE");
+        JButton resetButton = new JButton("RESET");
+        JLabel resultLabel = new JLabel("Share per person: ");
+        JLabel outputLabel = new JLabel();
+
+        panel.add(totalLabel);
+        panel.add(totalField);
+        panel.add(peopleLabel);
+        panel.add(peopleField);
+        panel.add(calcButton);
+        panel.add(resetButton);
+        panel.add(resultLabel);
+        panel.add(outputLabel);
+
+        calcButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String totalText = totalField.getText().trim();
+                String peopleText = peopleField.getText().trim();
+
+                if (totalText.isEmpty() || peopleText.isEmpty()) {
+                    outputLabel.setText("Please enter both total expense and number of people.");
+                    return;
+                }
+
+                try {
+                    double total = Double.parseDouble(totalText);
+                    int people = Integer.parseInt(peopleText);
+                    if (people <= 0) {
+                        outputLabel.setText("Number of people must be greater than zero!");
+                    } else {
+                        double share = total / people;
+                        outputLabel.setText(String.format("%.2f", share));
+                    }
+                } catch (NumberFormatException ex) {
+                    outputLabel.setText("Invalid input!");
+                }
+            }
+        });
+
+        resetButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                totalField.setText("");
+                peopleField.setText("");
+                outputLabel.setText("");
+            }
+        });
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 200);
+        frame.setVisible(true);
+    }
+}
